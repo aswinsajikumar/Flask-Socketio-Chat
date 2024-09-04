@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Application</title>
+</head>
+<body>
+    <h1>Basic Chat</h1>
+    <div id="chat">
+        <div id="messages"></div>
+        <input id="message" autocomplete="off" /><button onclick="sendMessage()">Send</button>
+    </div>
+
+    <!-- Include Socket.IO client library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script type="text/javascript">
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+        // Display messages from the server
+        socket.on('message', function(msg) {
+            var messagesDiv = document.getElementById('messages');
+            var newMessage = document.createElement('div');
+            newMessage.textContent = msg;
+            messagesDiv.appendChild(newMessage);
+        });
+
+        // Send a message to the server
+        function sendMessage() {
+            var input = document.getElementById('message');
+            var message = input.value;
+            socket.send(message);
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
